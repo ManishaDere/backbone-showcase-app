@@ -1,7 +1,7 @@
 (function(){
 
 	$( document ).ready(function() {
-		new App.RootView()
+		new App.views.RootView()
 	});
 
 })(jQuery); // IIFE

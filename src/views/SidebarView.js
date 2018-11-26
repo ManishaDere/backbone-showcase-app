@@ -1,6 +1,6 @@
 var App = App || {}
 
-App.SidebarView = Backbone.View.extend({
+App.views.SidebarView = Backbone.View.extend({
   el: '#sidebar',
 
   className: 'aside',

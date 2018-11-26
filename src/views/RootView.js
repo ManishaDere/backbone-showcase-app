@@ -1,11 +1,11 @@
 var App = App || {}
 
-App.RootView = Backbone.View.extend({
+App.views.RootView = Backbone.View.extend({
   el: '#root',
 
-  className: 'container',
-
-  events: {},
+  events: {
+    'submit form': 'onSubmit'
+  },
 
   initialize: function() {
     _.bindAll(this, 'render');
@@ -14,26 +14,40 @@ App.RootView = Backbone.View.extend({
 
   render: function() {
     var self = this;
-  	App.templateManager.load('/root', function(compiledTpl) {
-  		self.el.innerHTML = compiledTpl({
+    $.get('/src/templates/root.hbs', function(templateHtml) {
+
+      var template = Handlebars.compile(templateHtml);
+      self.$el.append( template({
         title: 'My App name'
-      });
-      // Render sidebar
-      this.renderSidebar();
-      // Render main
-      this.renderMain();
-  	});
+      }) );
+
+      // self.renderSidebar();
+      // self.renderMain();
+
+    });
+
+
   	return this;
   },
 
-  renderSidebar: function() {
-    App.templateManager.load('/main', function(compiledTpl) {
+  onSubmit: function(e) {
+    e.preventDefault();
+    var username = this.$el.find('[name="username"]').val();
+    var password = this.$el.find('[name="password"]').val();
+
+    $.post('/src/index.php', {
+      username: username,
+      password: password
+    }, function(data, textStatus, xhr) {
+      console.log('textStatus: textStatus');
+      /*optional stuff to do after success */
     });
   },
 
+  renderSidebar: function() {
+  },
+
   renderMain: function() {
-    App.templateManager.load('/sidebar', function(compiledTpl) {
-    });
   },
 
 
