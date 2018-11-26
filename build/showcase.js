@@ -1,6 +1,11 @@
+// Global configurations
+Handlebars.logger.level = 0;
+
+
+
 var App = {
 	models: {},
-	collecions: {},
+	collections: {},
 	views: {},
 };;/*
   TemplateManager class
@@ -70,6 +75,61 @@ var TemplateManager = (function() {
 App.templateManager = new TemplateManager();
 ;var App = App || {}
 
+App.models.Product = Backbone.Model.extend({
+  url: 'https://opt-showcase-api.optcentral.com/products/:id',
+  defaults: {
+    id: null,
+    title: '',
+    sku: null,
+    status: 'Active',
+    pricing: null,
+    pricing: null,
+    images: [],
+    attributes: {},
+  }
+});;var App = App || {}
+
+App.collections.Products = Backbone.Collection.extend({
+  url: 'https://opt-showcase-api.optcentral.com/products',
+  model: App.models.Product,
+  parse: function(response) {
+  	return response.data;
+  },
+});;var App = App || {}
+
+App.views.MainView = Backbone.View.extend({
+  el: '#main',
+
+  initialize: function() {
+    _.bindAll(this, 'render');
+    this.collection = new App.collections.Products();
+    this.collection.fetch();
+
+    this.listenTo(this.collection, 'sync', this.render);
+  },
+
+  render: function() {
+    if (!this.collection.length) {
+      this.$el.append('<div class="alert alert-info">Product(s) not found.</div>');
+      return this;
+    }
+
+    var products = this.collection.toJSON();
+    var self = this;
+
+    $.get('/src/templates/products.hbs', function(templateHtml) {
+      var template = Handlebars.compile(templateHtml);
+      var finalHtml = template({
+        products: products
+      });
+      self.$el.append(finalHtml);
+    });
+
+  	return this;
+  }
+
+});;var App = App || {}
+
 App.views.RootView = Backbone.View.extend({
   el: '#root',
 
@@ -92,7 +152,7 @@ App.views.RootView = Backbone.View.extend({
       }) );
 
       // self.renderSidebar();
-      // self.renderMain();
+      self.renderMainView();
 
     });
 
@@ -114,10 +174,11 @@ App.views.RootView = Backbone.View.extend({
     });
   },
 
-  renderSidebar: function() {
+  renderSidebarView: function() {
   },
 
-  renderMain: function() {
+  renderMainView: function() {
+    new App.views.MainView();
   },
 
 

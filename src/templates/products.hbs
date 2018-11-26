@@ -1,0 +1,33 @@
+{{#if products.length}}
+
+	<div class="row">
+	{{#each products}}
+	<div class="product col-4">
+	  <a class="product-link" href="#/product/{{id}}">
+	  	{{#each images}}
+	  		<img src="{{this}}" alt="{{title}}" class="img-responsive product-img">
+	  	{{/each}}
+	  </a>
+	  <div>
+	    <p>{{title}}</p>
+	    <p><strong>${{pricing.retail}}</strong></p>
+	  </div>
+	  <div class="hover-state">
+	    <div class="col-sm-4 padding-0 verticle-centered border-right-1px">
+	      <a class="hover-link">
+	        <span aria-hidden="true" class="fa fa-shopping-bag"></span><br>Order
+	      </a>
+	    </div>
+	    <div class="verticle-centered border-left-1px col-sm-4 padding-0">
+	      <a class="hover-link">
+	        <span class="glyphicon glyphicon-heart-empty"></span><br>Wishlist
+	      </a>
+	    </div>
+	  </div>
+	</div>
+	{{/each}}
+	</div>
+
+{{else}}
+	<div class="alert alert-info">Product(s) not found.</div>
+{{/if}}

@@ -1,5 +1,10 @@
+// Global configurations
+Handlebars.logger.level = 0;
+
+
+
 var App = {
 	models: {},
-	collecions: {},
+	collections: {},
 	views: {},
 };

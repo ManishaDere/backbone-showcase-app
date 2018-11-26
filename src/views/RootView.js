@@ -22,7 +22,7 @@ App.views.RootView = Backbone.View.extend({
       }) );
 
       // self.renderSidebar();
-      // self.renderMain();
+      self.renderMainView();
 
     });
 
@@ -44,10 +44,11 @@ App.views.RootView = Backbone.View.extend({
     });
   },
 
-  renderSidebar: function() {
+  renderSidebarView: function() {
   },
 
-  renderMain: function() {
+  renderMainView: function() {
+    new App.views.MainView();
   },
 
 
