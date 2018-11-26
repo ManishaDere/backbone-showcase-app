@@ -1,0 +1,26 @@
+{
+  "name": "showcase",
+  "version": "1.0.0",
+  "description": "Sample backbone project",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "backbone",
+    "catalog"
+  ],
+  "author": "Manisha",
+  "license": "ISC",
+  "dependencies": {
+    "backbone": "^1.3.3",
+    "bootstrap": "^4.1.3",
+    "handlebars": "^4.0.12",
+    "jquery": "^3.3.1",
+    "underscore": "^1.9.1"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.3",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-uglify": "^4.0.0"
+  }
+}
