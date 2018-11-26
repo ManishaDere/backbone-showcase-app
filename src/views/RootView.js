@@ -18,12 +18,23 @@ App.RootView = Backbone.View.extend({
   		self.el.innerHTML = compiledTpl({
         title: 'My App name'
       });
-
       // Render sidebar
+      this.renderSidebar();
       // Render main
-
+      this.renderMain();
   	});
   	return this;
-  }
+  },
+
+  renderSidebar: function() {
+    App.templateManager.load('/main', function(compiledTpl) {
+    });
+  },
+
+  renderMain: function() {
+    App.templateManager.load('/sidebar', function(compiledTpl) {
+    });
+  },
+
 
 });
