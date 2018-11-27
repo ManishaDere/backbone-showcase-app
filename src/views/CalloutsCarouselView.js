@@ -1,27 +1,27 @@
 var App = App || {}
 
-App.views.MainView = Backbone.View.extend({
-  el: '#main',
+App.views.CalloutsCarouselView = Backbone.View.extend({
+  el: '#calloutCarousel',
 
   initialize: function() {
     _.bindAll(this, 'render');
-    this.collection = new App.collections.Products();
+    this.collection = new App.collections.Callouts();
     this.collection.fetch();
-    console.log("products collections", this.collection);
     this.listenTo(this.collection, 'sync', this.render);
   },
 
   render: function() {
 
-    var products = this.collection.toJSON();
     var self = this;
+    var callouts = this.collection.toJSON();
 
-    $.get('/src/templates/products.hbs', function(templateHtml) {
+    $.get('/src/templates/calloutsCarousel.hbs', function(templateHtml) {
       var template = Handlebars.compile(templateHtml);
       var finalHtml = template({
-        products: products
+        callouts: callouts
       });
       self.$el.append(finalHtml);
+      self.$el.slick();
     });
 
   	return this;

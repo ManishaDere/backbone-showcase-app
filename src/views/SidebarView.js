@@ -3,8 +3,6 @@ var App = App || {}
 App.views.SidebarView = Backbone.View.extend({
   el: '#sidebar',
 
-  className: 'aside',
-
   events: {},
 
   initialize: function() {
@@ -14,12 +12,17 @@ App.views.SidebarView = Backbone.View.extend({
   },
 
   render: function() {
+
     var self = this;
-  	App.templateManager.load('/sidebar', function(compiledTpl) {
-  		self.el.innerHTML = compiledTpl({
+    $.get('/src/templates/sidebar.hbs', function(templateHtml) {
+
+      var template = Handlebars.compile(templateHtml);
+      self.$el.append( template({
         title: 'My SidebarView'
-      });
-  	});
+      }) );
+
+    });
+
   	return this;
   }
 

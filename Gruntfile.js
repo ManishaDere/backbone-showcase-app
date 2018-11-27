@@ -10,6 +10,7 @@ module.exports = function(grunt) {
       scripts: {
         src: [
           'src/index.js',
+          'node_modules/slick-carousel/slick/slick.js',
           'src/utils/TemplateLoader.js',
           'src/models/*.js',
           'src/collections/*.js',

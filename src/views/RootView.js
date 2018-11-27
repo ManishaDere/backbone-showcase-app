@@ -4,7 +4,7 @@ App.views.RootView = Backbone.View.extend({
   el: '#root',
 
   events: {
-    'submit form': 'onSubmit'
+    'submit form': 'onSubmit',
   },
 
   initialize: function() {
@@ -21,13 +21,20 @@ App.views.RootView = Backbone.View.extend({
         title: 'My App name'
       }) );
 
-      // self.renderSidebar();
+      self.renderSidebarView();
       self.renderMainView();
+      self.renderCalloutsCarouselView();
 
     });
 
 
   	return this;
+  },
+
+  onUsernameChange: function(evt) {
+    evt.preventDefault();
+    var username = evt.target.value;
+    console.log("username", username);
   },
 
   onSubmit: function(e) {
@@ -44,11 +51,18 @@ App.views.RootView = Backbone.View.extend({
     });
   },
 
+
+
   renderSidebarView: function() {
+    new App.views.SidebarView();
   },
 
   renderMainView: function() {
     new App.views.MainView();
+  },
+
+  renderCalloutsCarouselView: function() {
+    new App.views.CalloutsCarouselView();
   },
 
 
