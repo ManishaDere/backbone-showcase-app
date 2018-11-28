@@ -1,15 +1,15 @@
 var App = App || {}
 
 App.models.Product = Backbone.Model.extend({
-  url: 'https://opt-showcase-api.optcentral.com/products/:id',
+  url: function() {
+    return 'https://opt-showcase-api.optcentral.com/products/' + this.get('_id');
+  },
   defaults: {
-    id: null,
+    _id: null,
     title: '',
     sku: null,
     status: 'Active',
     pricing: null,
-    images: [],
-    attributes: {},
-    brand:[]
+    images: []
   }
 });

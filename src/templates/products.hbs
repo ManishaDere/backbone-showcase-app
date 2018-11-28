@@ -6,55 +6,21 @@
 	<div class="product col-4">
 	  <a class="product-link" href="#/product/{{id}}">
 	  	{{#each images}}
-	  		<img src="{{this}}" alt="{{title}}" class="img-responsive product-img">
+	  		<img src="{{this}}" alt="{{title}}" class="img-fluid product-img">
 	  	{{/each}}
-	  </a>
-	  <div>
-	    <p>{{brand.name}}</p>
-	    <p><strong>${{pricing.retail}}</strong></p>
-	  </div>
-	  <div>
-	  	 <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#myModal">
-    	 Edit
-  		</button>
-
-  		 <!-- The Modal -->
-		  <div class="modal fade" id="myModal">
-		    <div class="modal-dialog modal-dialog-centered">
-		      <div class="modal-content">
-		      
-		        <!-- Modal Header -->
-		        <div class="modal-header">
-		          <h4 class="modal-title">Update Product Name</h4>
-		          <button type="button" class="close" data-dismiss="modal">&times;</button>
-		        </div>
-		        
-		        <!-- Modal body -->
-		        <div class="modal-body">
-		          <input type="text" class="form-control"- value="{{brand.name}}">
-		        </div>
-		        
-		        <!-- Modal footer -->
-		        <div class="modal-footer">
-		          <button type="button" class="btn btn-secondary" data-dismiss="modal">Update</button>
-		        </div>
-		        
-		      </div>
-		    </div>
+		  <div class="product-description">
+		    <p class="product-name">{{brand.name}}</p>
+		    <p class="product-price"><strong>${{pricing.retail}}</strong></p>
 		  </div>
-	  </div>
-<!-- 	  <div>
-	    <div class="col-sm-4">
-	      <a class="hover-link">
-	        <span aria-hidden="true" class="fa fa-shopping-bag"></span><br>Order
-	      </a>
-	    </div>
-	    <div class="col-sm-4">
-	      <a class="hover-link">
-	        <i class='far fa-heart'></i><br>Wishlist
-	      </a>
-	    </div>
-	  </div> -->
+		  <div class="product-action-links">
+	      <button type="button" class="order-now-btn btn btn-primary">
+	        <span aria-hidden="true" class="fa fa-shopping-bag"></span>
+	      </button>
+	      <button type="button" class="add-to-wishlist-btn btn btn-secondary">
+	        <i class='far fa-heart'></i>
+	      </button>
+		  </div>
+	  </a>
 	</div>
 	{{/each}}
 	</div>

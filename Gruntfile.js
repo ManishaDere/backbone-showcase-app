@@ -9,6 +9,11 @@ module.exports = function(grunt) {
       },
       scripts: {
         src: [
+          'node_modules/jquery/dist/jquery.js',
+          'node_modules/bootstrap/dist/js/bootstrap.js',
+          'node_modules/underscore/underscore.js',
+          'node_modules/backbone/backbone.js',
+          'node_modules/handlebars/dist/handlebars.js',
           'src/index.js',
           'node_modules/slick-carousel/slick/slick.js',
           'src/utils/TemplateLoader.js',

@@ -2,7 +2,6 @@
 Handlebars.logger.level = 0;
 
 
-
 var App = {
 	models: {},
 	collections: {},
