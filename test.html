@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.5.0/css/all.css'>
+    <link rel="stylesheet" type="text/css" href="node_modules/slick-carousel/slick/slick.css">
+    <link rel="stylesheet" href="assets/css/app.css">
+
+    <title>Showcase App</title>
+  </head>
+  <body>
+
+    <script type="text/template" id="first-template">
+      <p>My first view</p>
+      <a href="#second">Go to second view</a>
+    </script>
+
+    <script type="text/template" id="second-template">
+      <p>My second view</p>
+      <a href="#first">Go to first view</a>
+    </script>
+
+    <div id="container"></div>
+
+    <script type="text/javascript">
+      
+      FirstView = Backbone.view.extend({
+        el: $("#container"),
+        initialize: function(){
+           this.render();
+        },
+
+        render: function(){
+          var template = _.template($("#first-template").html(),{});
+          this.$el.html(template);
+        }
+      });
+
+      SecondView = Backbone.view.extend({
+        el: $("#container"),
+        initialize: function(){
+           this.render();
+        },
+
+        render: function(){
+          var template = _.template($("#second-template").html(),{});
+          this.$el.html(template);
+        }
+      });
+
+      MyRouter = Backbone.Router.extend({
+
+        routes:{
+          "" : "firstPage",
+          "first": "firstPage",
+          "second": "secondPage"
+        },
+
+        firstPage:function(){
+          new FirstView();
+        },
+
+         secondPage:function(){
+          new SecondView();
+        }
+      });
+
+      var router = new MyRouter();
+      Backbone.history.start();
+
+    </script>
+
+    
+
+    <!-- Optional JavaScript -->
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="node_modules/underscore/underscore-min.js"></script>
+    <script src="node_modules/backbone/backbone-min.js"></script>
+    <script src="node_modules/handlebars/dist/handlebars.min.js"></script>
+
+<!--     <script type="text/javascript" src="build/showcase.js"></script>
+ -->  
+  </body>
+</html>

@@ -3207,9 +3207,9 @@ App.views.MainView = Backbone.View.extend({
 App.views.RootView = Backbone.View.extend({
   el: '#root',
 
-  events: {
-    'submit form': 'onSubmit',
-  },
+  // events: {
+  //   'submit form': 'onSubmit',
+  // },
 
   initialize: function() {
     _.bindAll(this, 'render');
@@ -3235,25 +3235,25 @@ App.views.RootView = Backbone.View.extend({
   	return this;
   },
 
-  onUsernameChange: function(evt) {
-    evt.preventDefault();
-    var username = evt.target.value;
-    console.log("username", username);
-  },
+  // onUsernameChange: function(evt) {
+  //   evt.preventDefault();
+  //   var username = evt.target.value;
+  //   console.log("username", username);
+  // },
 
-  onSubmit: function(e) {
-    e.preventDefault();
-    var username = this.$el.find('[name="username"]').val();
-    var password = this.$el.find('[name="password"]').val();
+  // onSubmit: function(e) {
+  //   e.preventDefault();
+  //   var username = this.$el.find('[name="username"]').val();
+  //   var password = this.$el.find('[name="password"]').val();
 
-    $.post('/src/index.php', {
-      username: username,
-      password: password
-    }, function(data, textStatus, xhr) {
-      console.log('textStatus: textStatus');
-      /*optional stuff to do after success */
-    });
-  },
+  //   $.post('/src/index.php', {
+  //     username: username,
+  //     password: password
+  //   }, function(data, textStatus, xhr) {
+  //     console.log('textStatus: textStatus');
+  //     /*optional stuff to do after success */
+  //   });
+  // },
 
 
 
@@ -3267,7 +3267,7 @@ App.views.RootView = Backbone.View.extend({
 
   renderCalloutsCarouselView: function() {
     new App.views.CalloutsCarouselView();
-  }
+  },
 
 
 });;var App = App || {}
