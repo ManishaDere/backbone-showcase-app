@@ -1,6 +1,6 @@
 var App = App || {}
 
-App.views.RootView = Backbone.View.extend({
+App.views.HomeView = Backbone.View.extend({
   el: '#root',
 
   events: {
@@ -14,10 +14,10 @@ App.views.RootView = Backbone.View.extend({
 
   render: function() {
     var self = this;
-    $.get('/src/templates/root.hbs', function(templateHtml) {
+    $.get('/src/templates/home.hbs', function(templateHtml) {
 
       var template = Handlebars.compile(templateHtml);
-      self.$el.append( template({
+      self.$el.html( template({
         title: 'My App name'
       }) );
 
@@ -29,12 +29,6 @@ App.views.RootView = Backbone.View.extend({
 
 
   	return this;
-  },
-
-  onUsernameChange: function(evt) {
-    evt.preventDefault();
-    var username = evt.target.value;
-    console.log("username", username);
   },
 
   onSubmit: function(e) {
@@ -50,8 +44,6 @@ App.views.RootView = Backbone.View.extend({
       /*optional stuff to do after success */
     });
   },
-
-
 
   renderSidebarView: function() {
     new App.views.SidebarView();

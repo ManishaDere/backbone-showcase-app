@@ -7,7 +7,6 @@ App.views.MainView = Backbone.View.extend({
     _.bindAll(this, 'render');
     this.collection = new App.collections.Products();
     this.collection.fetch();
-    console.log("products collections", this.collection);
     this.listenTo(this.collection, 'sync', this.render);
   },
 
@@ -21,7 +20,7 @@ App.views.MainView = Backbone.View.extend({
       var finalHtml = template({
         products: products
       });
-      self.$el.append(finalHtml);
+      self.$el.html(finalHtml);
     });
 
   	return this;

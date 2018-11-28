@@ -1,0 +1,9 @@
+<div id="product">
+	<a onclick="history.back();" class="btn btn-primary">Back</a>
+  <h1>{{product.title}}</h1>
+  {{#each product.images}}
+  	<img src="{{this}}" class="img-fluid">
+  {{/each}}
+  <p>{{product.pricing.retail}}</p>
+</div>
+

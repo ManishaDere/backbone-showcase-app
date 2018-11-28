@@ -1,7 +1,13 @@
 (function(){
 
 	$( document ).ready(function() {
-		new App.views.RootView()
+		//Store router instance
+		App.router = new App.Router();
+		if (!Backbone.History.started) {
+			Backbone.history.start({
+				pushState: false
+			});
+		}
 	});
 
 })(jQuery); // IIFE
