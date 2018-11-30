@@ -154,3 +154,21 @@ footer {
   align-items: center;
   justify-content: space-around;
 }
+#root .page-header {
+  margin-bottom: 30px;
+  padding: 20px 0 35px!important;
+  border-bottom: 1px solid #000;
+  text-align: center;
+  margin: 0 0 50px!important;
+  font-weight: 900;
+  color: #545454;
+}
+.spinner-div {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+.designers-menu {
+  color: #555;
+  font-weight: 500;
+}

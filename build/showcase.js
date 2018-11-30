@@ -22755,15 +22755,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ })
 /******/ ])
 });
-;;// Global configurations
-Handlebars.logger.level = 0;
-
-
-var App = {
-	models: {},
-	collections: {},
-	views: {},
-};;/*
+;;/*
      _ _      _       _
  ___| (_) ___| | __  (_)___
 / __| | |/ __| |/ /  | / __|
@@ -25840,7 +25832,44 @@ var TemplateManager = (function() {
 
 // Intitalize template manager
 App.templateManager = new TemplateManager();
-;var App = App || {}
+;Handlebars.registerHelper('list', function(designers, options) {
+	console.log('in registerHelper ', designers);
+	console.log('in registerHelper 3', options);
+
+  var Chars = '';
+  for(var j=0; j< designers.length; j++){
+    Chars = Chars + designers[j].name[0];
+  }
+  var startWithCharacters = _.uniq(Chars);
+  console.log(startWithCharacters, "startWithCharacters");
+
+  startWithCharacters.sort();
+  var out = "<div>";
+
+  for(var i=0; i < startWithCharacters.length; i++){
+
+  	out = out + "<h2>" + startWithCharacters[i] + "</h2>" + "<hr/>";
+
+  	for(var j=0; j< designers.length; j++){
+
+  		if(designers[j].name.substr(0, 1) === startWithCharacters[i])
+  			out = out + "<p>" + designers[j].name + "</p>";
+  	}
+
+	}
+
+  return out + "</div>";
+});
+
+;// Global configurations
+Handlebars.logger.level = 0;
+
+
+var App = {
+	models: {},
+	collections: {},
+	views: {},
+};;var App = App || {}
 
 App.models.Callout = Backbone.Model.extend({
   url: 'https://opt-showcase-api.optcentral.com/callouts/:_id',
@@ -25849,6 +25878,16 @@ App.models.Callout = Backbone.Model.extend({
     desktop_image: "",
   }
 });;var App = App || {}
+
+App.models.Designer = Backbone.Model.extend({
+  url: 'https://opt-showcase-api-stage.optcentral.com/brands/:_id',
+  defaults: {
+    _id: '',
+    name: '',
+  }
+});
+
+;var App = App || {}
 
 App.models.Product = Backbone.Model.extend({
   url: function() {
@@ -25884,6 +25923,11 @@ App.collections.Callouts = Backbone.Collection.extend({
   parse: function(response) {
   	return response[0].callouts;
   },
+});;var App = App || {}
+
+App.collections.Designers = Backbone.Collection.extend({
+  url: 'https://opt-showcase-api-stage.optcentral.com/brands?brand_ids=3%2C2%2C46%2C463%2C581%2C50%2C1119%2C145%2C1801%2C2086&retailerId=143&showcase=OOO&status=Active',
+  model: App.models.Designer
 });;var App = App || {}
 
 App.collections.Products = Backbone.Collection.extend({
@@ -25931,6 +25975,47 @@ App.views.CalloutsCarouselView = Backbone.View.extend({
 
 });;var App = App || {}
 
+App.views.DesignerView = Backbone.View.extend({
+  el: '#root',
+
+  events: {
+    'click #a-link': 'onCharClick'
+  },
+
+  initialize: function() {
+    _.bindAll(this, 'render');
+    this.collection = new App.collections.Designers();
+    this.collection.fetch();
+    this.listenTo(this.collection, 'sync', this.render);
+  },
+
+  render: function() {
+    var self = this;
+    console.log(self.collection.models, "collections fetched");
+    $.get('/src/templates/designer.hbs', function(templateHtml) {
+
+      var template = Handlebars.compile(templateHtml);
+      self.$el.html( template({
+        designers: self.collection.toJSON()
+      }) );
+
+
+    });
+
+  	return this;
+  },
+
+  onCharClick: function (e) {
+
+    console.log("click event");
+    var self = this;
+    self.$el.scrollTop(0);
+
+  }
+
+
+});;var App = App || {}
+
 App.views.HomeView = Backbone.View.extend({
   el: '#root',
 
@@ -25951,6 +26036,8 @@ App.views.HomeView = Backbone.View.extend({
       self.$el.html( template({
         title: 'My App name'
       }) );
+
+
 
       self.renderSidebarView();
       self.renderMainView();
@@ -25974,6 +26061,12 @@ App.views.HomeView = Backbone.View.extend({
       console.log('textStatus: textStatus');
       /*optional stuff to do after success */
     });
+  },
+
+  onCharClick: function (e) {
+    console.log("click event");
+    var self = this;
+    self.$el.find(window).scrollTop(0);
   },
 
   renderSidebarView: function() {
@@ -26043,7 +26136,8 @@ App.views.ProductView = Backbone.View.extend({
   initialize: function(options) {
     _.bindAll(this, 'render');
     options || (options = {});
-
+    // options = options || {};
+    // falsy values - 0, null, undefined, '' NaN
     this.model = new App.models.Product();
     this.model.set('_id', options.productId);
     this.model.fetch();
@@ -26095,16 +26189,16 @@ App.views.SidebarView = Backbone.View.extend({
 App.Router = Backbone.Router.extend({
 
 	routes: {
-		'': 'homeView',
-    'product/:id': 'productView',
-    '*actions': 'pageNotFound',
+		'': 'homeView', // #/
+    'product/:productId': 'productView',  // #/product/1223
+    'brands/': 'designerView',
+    '*actions': 'pageNotFound',  // #/xyz
   },
 
 	initialize: function(options) {
 	},
 
   pageNotFound: function() {
-    console.log(' ia ma here')
     new App.views.PageNotFound();
   },
 
@@ -26112,10 +26206,14 @@ App.Router = Backbone.Router.extend({
     new App.views.HomeView();
   },
 
-  productView: function(id) {
+  productView: function(productId) {
     new App.views.ProductView({
-      productId: id
+      productId: productId
     });
+  },
+
+  designerView: function() {
+    new App.views.DesignerView();
   }
 
 });

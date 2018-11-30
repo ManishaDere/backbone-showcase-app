@@ -21,6 +21,8 @@ App.views.HomeView = Backbone.View.extend({
         title: 'My App name'
       }) );
 
+
+
       self.renderSidebarView();
       self.renderMainView();
       self.renderCalloutsCarouselView();
@@ -43,6 +45,12 @@ App.views.HomeView = Backbone.View.extend({
       console.log('textStatus: textStatus');
       /*optional stuff to do after success */
     });
+  },
+
+  onCharClick: function (e) {
+    console.log("click event");
+    var self = this;
+    self.$el.find(window).scrollTop(0);
   },
 
   renderSidebarView: function() {

@@ -5,6 +5,7 @@ App.Router = Backbone.Router.extend({
 	routes: {
 		'': 'homeView', // #/
     'product/:productId': 'productView',  // #/product/1223
+    'brands/': 'designerView',
     '*actions': 'pageNotFound',  // #/xyz
   },
 
@@ -23,6 +24,10 @@ App.Router = Backbone.Router.extend({
     new App.views.ProductView({
       productId: productId
     });
+  },
+
+  designerView: function() {
+    new App.views.DesignerView();
   }
 
 });

@@ -14,9 +14,10 @@ module.exports = function(grunt) {
           'node_modules/underscore/underscore.js',
           'node_modules/backbone/backbone.js',
           'node_modules/handlebars/dist/handlebars.js',
-          'src/index.js',
           'node_modules/slick-carousel/slick/slick.js',
           'src/utils/TemplateLoader.js',
+          'src/utils/handlebarHelpers.js',
+          'src/index.js',
           'src/models/*.js',
           'src/collections/*.js',
           'src/views/*.js',
@@ -35,12 +36,24 @@ module.exports = function(grunt) {
         src: 'build/<%= pkg.name %>.js',
         dest: 'build/<%= pkg.name %>.min.js'
       }
-    }
+    },
+
+    watch: {
+      scripts: {
+        files: ['src/**/*.js'],
+        tasks: ['default'],
+        options: {
+          spawn: false,
+        },
+      },
+    },
+
   });
 
   // Load the plugin that provides the "uglify" task.
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
 
   // Default task(s).
