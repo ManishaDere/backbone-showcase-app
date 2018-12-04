@@ -5,4 +5,5 @@ var App = {
 	models: {},
 	collections: {},
 	views: {},
+	helpers: {}
 };

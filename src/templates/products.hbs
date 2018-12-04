@@ -52,9 +52,7 @@
 	{{#each products}}
 	<div class="product col-4">
 	  <a class="product-link" href="#/product/{{id}}">
-	  	{{#each images}}
-	  		<img src="{{this}}" alt="{{title}}" class="img-fluid product-img">
-	  	{{/each}}
+	  		<img src="{{images.[0]}}" alt="Product Hero Image" class="img-fluid product-img">
 		  <div class="product-description">
 		    <p class="product-name">{{brand.name}}</p>
 		    <p class="product-price"><strong>${{pricing.retail}}</strong></p>
@@ -71,11 +69,8 @@
 	</div>
 	{{/each}}
 	</div>
-	<div class="pages">
-		<span><a href="">page number</a></span>
-		|<span>{{currentCount}} of {{totalCount}}</span>|
-		<span><a href="#/" id="goto-next-page">next page</a></span>
-	</div>
+
+  <div id="products-pagination"></div>
 
 {{else}}
 	<div class="alert alert-info">Product(s) not found.</div>

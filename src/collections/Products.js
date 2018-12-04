@@ -6,9 +6,10 @@ App.collections.Products = Backbone.Collection.extend({
   	return base_url;
   },
   model: App.models.Product,
-  parse: function(response) {
-  	return response.data;
-  },
+	parse: function(response) {
+	  this.totalCount = response.totalCount;
+	  return response.data;
+  }
 
 });
 
