@@ -172,3 +172,32 @@ footer {
   color: #555;
   font-weight: 500;
 }
+ #calloutCarousel .slide {
+  display: flex !important;
+  justify-content: center;
+}
+.submenu-bar {
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  padding: 20px;
+}
+.submenu-bar-right-column .btn,
+.submenu-bar-left-column .btn {
+  border: 1px solid #ccc;
+  border-radius: 0;
+  padding: 2px 6px;
+}
+.submenu-bar-right-column {
+  display: flex;
+  justify-content: flex-end;
+  vertical-align: center;
+  align-items: center;
+}
+.submenu-bar-left-column {
+  display: flex;
+  justify-content: flex-start;
+}
+.styled-select select{
+  border: none;
+}
+

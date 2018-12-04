@@ -7,7 +7,7 @@ App.views.ProductView = Backbone.View.extend({
   },
 
   initialize: function(options) {
-    _.bindAll(this, 'render');
+    _.bindAll(this, 'render', 'onClickedNextPage');
     options || (options = {});
     // options = options || {};
     // falsy values - 0, null, undefined, '' NaN
@@ -28,5 +28,7 @@ App.views.ProductView = Backbone.View.extend({
     });
     return this;
   },
+
+
 
 });

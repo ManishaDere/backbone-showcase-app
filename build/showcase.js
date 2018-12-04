@@ -25861,9 +25861,21 @@ App.templateManager = new TemplateManager();
   return out + "</div>";
 });
 
+;var setFilters = function(newFilters) {
+	var oldFilters = getFilters();
+	_.extend(oldFilters, newFilters);
+	localStorage.setItem('filters', JSON.stringify(oldFilters));
+}
+
+var getFilters = function() {
+	var filters = localStorage.getItem('filters');
+	filters = JSON.parse(filters);
+	return filters;
+}
+
+
 ;// Global configurations
 Handlebars.logger.level = 0;
-
 
 var App = {
 	models: {},
@@ -25871,8 +25883,11 @@ var App = {
 	views: {},
 };;var App = App || {}
 
+var base_url = 'https://opt-showcase-api.optcentral.com/callouts/';
 App.models.Callout = Backbone.Model.extend({
-  url: 'https://opt-showcase-api.optcentral.com/callouts/:_id',
+  url: function() {
+    return base_url + this.get('_id');
+  },
   defaults: {
     _id: '',
     desktop_image: "",
@@ -25901,21 +25916,10 @@ App.models.Product = Backbone.Model.extend({
     pricing: null,
     images: []
   }
-});;var App = App || {}
+});
 
-App.models.searchProduct = Backbone.Model.extend({
-  url: 'https://optqa.optcentral.com/optportal/catalog/:id',
-  defaults: {
-    id: null,
-    title: '',
-    sku: null,
-    status: 'Active',
-    pricing: null,
-    pricing: null,
-    images: [],
-    attributes: {},
-  }
-});;var App = App || {}
+//+ this.get('_id') + '/'
+////+ this.get('limit') + '/' + this.get('page') + '/' + this.get('sort');;var App = App || {}
 
 App.collections.Callouts = Backbone.Collection.extend({
   url: 'https://opt-showcase-api.optcentral.com/callouts',
@@ -25930,21 +25934,25 @@ App.collections.Designers = Backbone.Collection.extend({
   model: App.models.Designer
 });;var App = App || {}
 
+var base_url = 'https://opt-showcase-api.optcentral.com/products';
 App.collections.Products = Backbone.Collection.extend({
-  url: 'https://opt-showcase-api.optcentral.com/products',
+  url: function () {
+  	return base_url;
+  },
   model: App.models.Product,
   parse: function(response) {
   	return response.data;
   },
-});;var App = App || {}
 
-App.collections.searchProducts = Backbone.Collection.extend({
-  url: 'https://optqa.optcentral.com/optportal/catalog/',
-  model: App.models.searchProduct,
-  parse: function(response) {
-  	return response.data;
-  },
-});;var App = App || {}
+});
+
+
+//collection.fetch({ data: $.param({ page: 1}) });
+/*collection.fetch({
+    data: { page: 1 },
+    processData: true
+});
+*/;var App = App || {}
 
 App.views.CalloutsCarouselView = Backbone.View.extend({
   el: '#calloutCarousel',
@@ -25979,7 +25987,7 @@ App.views.DesignerView = Backbone.View.extend({
   el: '#root',
 
   events: {
-    'click #a-link': 'onCharClick'
+    'click a[href="#/"]': 'onCharClick'
   },
 
   initialize: function() {
@@ -26005,23 +26013,19 @@ App.views.DesignerView = Backbone.View.extend({
   	return this;
   },
 
-  onCharClick: function (e) {
-
+  onCharClick: function(e) {
     console.log("click event");
     var self = this;
-    self.$el.scrollTop(0);
+//    self.$el.find(window).scrollTop(0);
+    self.$el.animate({scrollTop:0}, 'slow');
+  },
 
-  }
 
 
 });;var App = App || {}
 
 App.views.HomeView = Backbone.View.extend({
   el: '#root',
-
-  events: {
-    'submit form': 'onSubmit',
-  },
 
   initialize: function() {
     _.bindAll(this, 'render');
@@ -26049,26 +26053,6 @@ App.views.HomeView = Backbone.View.extend({
   	return this;
   },
 
-  onSubmit: function(e) {
-    e.preventDefault();
-    var username = this.$el.find('[name="username"]').val();
-    var password = this.$el.find('[name="password"]').val();
-
-    $.post('/src/index.php', {
-      username: username,
-      password: password
-    }, function(data, textStatus, xhr) {
-      console.log('textStatus: textStatus');
-      /*optional stuff to do after success */
-    });
-  },
-
-  onCharClick: function (e) {
-    console.log("click event");
-    var self = this;
-    self.$el.find(window).scrollTop(0);
-  },
-
   renderSidebarView: function() {
     new App.views.SidebarView();
   },
@@ -26082,15 +26066,21 @@ App.views.HomeView = Backbone.View.extend({
   },
 
 
-});;var App = App || {}
+});;var App = App || {};
+
 
 App.views.MainView = Backbone.View.extend({
   el: '#main',
 
+  events: {
+    'change #sort': 'sortProducts',
+    'change #items-per-page': 'chooseItemsPerPage'
+  },
+
   initialize: function() {
-    _.bindAll(this, 'render');
+    _.bindAll(this, 'render', 'doFetch');
     this.collection = new App.collections.Products();
-    this.collection.fetch();
+    this.doFetch();
     this.listenTo(this.collection, 'sync', this.render);
   },
 
@@ -26108,7 +26098,29 @@ App.views.MainView = Backbone.View.extend({
     });
 
   	return this;
+  },
+
+  sortProducts: function(e) {
+    var self = this;
+    var selectedSortOption = this.$el.find("#sort option:selected").val();
+    setFilters({ sort : selectedSortOption});
+    this.doFetch();
+  },
+
+  chooseItemsPerPage: function() {
+    var self = this;
+    var selectedLimit = this.$el.find("#items-per-page option:selected").val();
+    setFilters({ limit: selectedLimit});
+    this.doFetch();
+  },
+
+  doFetch: function () {
+    var filters = getFilters();
+    this.collection.fetch({data: filters});
+    console.log("doFetch ", filters);
   }
+
+
 
 });;var App = App || {}
 
@@ -26134,7 +26146,7 @@ App.views.ProductView = Backbone.View.extend({
   },
 
   initialize: function(options) {
-    _.bindAll(this, 'render');
+    _.bindAll(this, 'render', 'onClickedNextPage');
     options || (options = {});
     // options = options || {};
     // falsy values - 0, null, undefined, '' NaN
@@ -26155,6 +26167,8 @@ App.views.ProductView = Backbone.View.extend({
     });
     return this;
   },
+
+
 
 });;var App = App || {}
 

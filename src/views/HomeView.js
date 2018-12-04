@@ -3,10 +3,6 @@ var App = App || {}
 App.views.HomeView = Backbone.View.extend({
   el: '#root',
 
-  events: {
-    'submit form': 'onSubmit',
-  },
-
   initialize: function() {
     _.bindAll(this, 'render');
     this.render();
@@ -31,26 +27,6 @@ App.views.HomeView = Backbone.View.extend({
 
 
   	return this;
-  },
-
-  onSubmit: function(e) {
-    e.preventDefault();
-    var username = this.$el.find('[name="username"]').val();
-    var password = this.$el.find('[name="password"]').val();
-
-    $.post('/src/index.php', {
-      username: username,
-      password: password
-    }, function(data, textStatus, xhr) {
-      console.log('textStatus: textStatus');
-      /*optional stuff to do after success */
-    });
-  },
-
-  onCharClick: function (e) {
-    console.log("click event");
-    var self = this;
-    self.$el.find(window).scrollTop(0);
   },
 
   renderSidebarView: function() {

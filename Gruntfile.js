@@ -17,6 +17,7 @@ module.exports = function(grunt) {
           'node_modules/slick-carousel/slick/slick.js',
           'src/utils/TemplateLoader.js',
           'src/utils/handlebarHelpers.js',
+          'src/utils/UpdateData.js',
           'src/index.js',
           'src/models/*.js',
           'src/collections/*.js',

@@ -1,7 +1,10 @@
 var App = App || {}
 
+var base_url = 'https://opt-showcase-api.optcentral.com/callouts/';
 App.models.Callout = Backbone.Model.extend({
-  url: 'https://opt-showcase-api.optcentral.com/callouts/:_id',
+  url: function() {
+    return base_url + this.get('_id');
+  },
   defaults: {
     _id: '',
     desktop_image: "",

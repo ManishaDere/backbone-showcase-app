@@ -4,7 +4,7 @@ App.views.DesignerView = Backbone.View.extend({
   el: '#root',
 
   events: {
-    'click #a-link': 'onCharClick'
+    'click a[href="#/"]': 'onCharClick'
   },
 
   initialize: function() {
@@ -30,6 +30,12 @@ App.views.DesignerView = Backbone.View.extend({
   	return this;
   },
 
+  onCharClick: function(e) {
+    console.log("click event");
+    var self = this;
+//    self.$el.find(window).scrollTop(0);
+    self.$el.animate({scrollTop:0}, 'slow');
+  },
 
 
 

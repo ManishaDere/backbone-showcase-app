@@ -13,3 +13,6 @@ App.models.Product = Backbone.Model.extend({
     images: []
   }
 });
+
+//+ this.get('_id') + '/'
+////+ this.get('limit') + '/' + this.get('page') + '/' + this.get('sort');
