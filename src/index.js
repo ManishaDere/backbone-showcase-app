@@ -5,5 +5,6 @@ var App = {
 	models: {},
 	collections: {},
 	views: {},
-	helpers: {}
+	helpers: {},
+	eventBus: _.extend({}, Backbone.Events)
 };

@@ -1,0 +1,27 @@
+{{#if products.length}}
+{{log products}}
+<div class="row">
+  {{#each products}}
+  <div class="product col-4">
+    <a class="product-link" href="#/product/{{id}}">
+        <img src="{{images.[0]}}" alt="Product Hero Image" class="img-fluid product-img">
+      <div class="product-description">
+        <p class="product-name">{{brand.name}}</p>
+        <p class="product-price"><strong>${{pricing.retail}}</strong></p>
+      </div>
+      <div class="product-action-links">
+        <button type="button" class="order-now-btn btn btn-primary">
+          <span aria-hidden="true" class="fa fa-shopping-bag"></span>
+        </button>
+        <button type="button" class="add-to-wishlist-btn btn btn-secondary">
+          <i class='far fa-heart'></i>
+        </button>
+      </div>
+    </a>
+  </div>
+  {{/each}}
+</div>
+{{else}}
+  <div class="alert alert-info">Product(s) not found.</div>
+  <div class="spinner-div"><i class="fa fa-spinner fa-spin" style="font-size:36px"></i></div>
+{{/if}}

@@ -1,9 +1,12 @@
 var App = App || {};
 
-App.views.MainView = Backbone.View.extend({
+App.views.MainView1 = Backbone.View.extend({
   el: '#main',
 
   events: {
+    'change #sort': 'sortProducts',
+    'click .page': 'pageNumberClicked',
+    'change #items-per-page': 'chooseItemsPerPage'
   },
 
   initialize: function() {
@@ -36,45 +39,43 @@ App.views.MainView = Backbone.View.extend({
 
     var self = this;
     var products = self.collection.toJSON();
+    var appliedFilters = App.helpers.getFilters();
 
-    $.get('/src/templates/main.hbs', function(templateHtml) {
+    $.get('/src/templates/products.hbs', function(templateHtml) {
       var template = Handlebars.compile(templateHtml);
-      var finalHtml = template();
+      var finalHtml = template({
+        products: products,
+        totalCount: self.collection.totalCount,
+      });
       self.$el.html(finalHtml);
-      self.renderTopActionsBarView();
-      self.renderProductsListView();
       self.renderPaginationView();
     });
-  	return self;
+  	return this;
   },
 
-
-  renderTopActionsBarView: function () {
-    new App.views.TopActionsBarView({
-      totalCount: this.collection.totalCount
+  sortProducts: function(e) {
+    var selectedSortOption = this.$el.find("#sort option:selected").val();
+    App.helpers.setFilters({
+      sort: selectedSortOption
     });
-    console.log("renderTopActionsBarView initialized");
-    console.log("this.collection.totalCount", this.collection.totalCount);
+    App.eventBus.trigger('GET_PRODUCTS', {
+      sort: selectedSortOption
+    });
   },
 
-  renderProductsListView: function() {
-    new App.views.ProductsListView({
-      products: this.collection.toJSON()
+  chooseItemsPerPage: function() {
+    var selectedLimit = this.$el.find("#items-per-page option:selected").val();
+    App.helpers.setFilters({
+      limit: selectedLimit
     });
-    console.log("renderProductsListView initialized");
-    console.log("this.collection", this.collection.toJSON());
+    App.eventBus.trigger('GET_PRODUCTS', {
+      limit: selectedLimit
+    })
   },
 
   renderPaginationView: function() {
-    new App.views.PaginationView({
-      totalCount: this.collection.totalCount
-    });
-    console.log("renderPaginationView initialized");
-    console.log("this.collection.totalCount", this.collection.totalCount);
+    new App.views.PaginationView();
   }
-
-
-
 
 
 });

@@ -7,7 +7,7 @@ App.views.ProductView = Backbone.View.extend({
   },
 
   initialize: function(options) {
-    _.bindAll(this, 'render', 'onClickedNextPage');
+    _.bindAll(this, 'render');
     options || (options = {});
     // options = options || {};
     // falsy values - 0, null, undefined, '' NaN

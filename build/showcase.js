@@ -25868,8 +25868,10 @@ var App = {
 	models: {},
 	collections: {},
 	views: {},
-	helpers: {}
-};;var App = App || {}
+	helpers: {},
+	eventBus: _.extend({}, Backbone.Events)
+};
+;var App = App || {}
 
 App.helpers = {
 	setFilters: function(newFilters) {
@@ -26077,14 +26079,10 @@ App.views.HomeView = Backbone.View.extend({
 
 });;var App = App || {};
 
-
 App.views.MainView = Backbone.View.extend({
   el: '#main',
 
   events: {
-    'change #sort': 'sortProducts',
-    'change #items-per-page': 'chooseItemsPerPage',
-    'click .page': 'pageClicked'
   },
 
   initialize: function() {
@@ -26097,8 +26095,102 @@ App.views.MainView = Backbone.View.extend({
       sort: 'pricing.retail;desc'
     });
 
-    this.doFetch();
+    App.eventBus.on('GET_PRODUCTS', (function(eventData) {
+      console.log('GET_PRODUCTS event fired with data ', eventData);
+      this.doFetch();
+    }).bind(this));
+
+    App.eventBus.trigger('GET_PRODUCTS');
     this.listenTo(this.collection, 'sync', this.render);
+  },
+
+
+  doFetch: function () {
+    var filters = App.helpers.getFilters();
+    this.collection.fetch({data: filters});
+    console.log("doFetch ", filters);
+  },
+
+  render: function() {
+
+    var self = this;
+    var products = self.collection.toJSON();
+
+    $.get('/src/templates/main.hbs', function(templateHtml) {
+      var template = Handlebars.compile(templateHtml);
+      var finalHtml = template();
+      self.$el.html(finalHtml);
+      self.renderTopActionsBarView();
+      self.renderProductsListView();
+      self.renderPaginationView();
+    });
+  	return self;
+  },
+
+
+  renderTopActionsBarView: function () {
+    new App.views.TopActionsBarView({
+      totalCount: this.collection.totalCount
+    });
+    console.log("renderTopActionsBarView initialized");
+    console.log("this.collection.totalCount", this.collection.totalCount);
+  },
+
+  renderProductsListView: function() {
+    new App.views.ProductsListView({
+      products: this.collection.toJSON()
+    });
+    console.log("renderProductsListView initialized");
+    console.log("this.collection", this.collection.toJSON());
+  },
+
+  renderPaginationView: function() {
+    new App.views.PaginationView({
+      totalCount: this.collection.totalCount
+    });
+    console.log("renderPaginationView initialized");
+    console.log("this.collection.totalCount", this.collection.totalCount);
+  }
+
+
+
+
+
+});;var App = App || {};
+
+App.views.MainView1 = Backbone.View.extend({
+  el: '#main',
+
+  events: {
+    'change #sort': 'sortProducts',
+    'click .page': 'pageNumberClicked',
+    'change #items-per-page': 'chooseItemsPerPage'
+  },
+
+  initialize: function() {
+    _.bindAll(this, 'render', 'doFetch');
+    this.collection = new App.collections.Products();
+    // Set inital filters
+    App.helpers.setFilters({
+      page: 1,
+      limit: 24,
+      sort: 'pricing.retail;desc'
+    });
+
+    App.eventBus.on('GET_PRODUCTS', (function(eventData) {
+      console.log('GET_PRODUCTS event fired with data ', eventData);
+      this.doFetch();
+    }).bind(this));
+
+    App.eventBus.trigger('GET_PRODUCTS');
+    this.listenTo(this.collection, 'sync', this.render);
+  },
+
+
+  doFetch: function () {
+    var filters = App.helpers.getFilters();
+    this.collection.fetch({data: filters});
+    console.log("doFetch ", filters);
   },
 
   render: function() {
@@ -26111,58 +26203,37 @@ App.views.MainView = Backbone.View.extend({
       var template = Handlebars.compile(templateHtml);
       var finalHtml = template({
         products: products,
-        currentCount: self.collection.currentCount,
         totalCount: self.collection.totalCount,
-        // nextPage: self.next
       });
       self.$el.html(finalHtml);
-
-
-      var paginationHtml = '';
-      var numberOfPages = self.collection.totalCount / appliedFilters.limit;
-      for(var i=1; i<= numberOfPages; i++) {
-        paginationHtml += (
-          '<li class="page-item">' +
-          '<a class="page page-link" href="#" data-page=' + i + '>' + i + '</a>' +
-          '</li>'
-        );
-      }
-      self.$el.find('#products-pagination').append(
-        '<ul class="pagination">' +
-          paginationHtml +
-        '</ul>'
-      );
-
+      self.renderPaginationView();
     });
   	return this;
   },
 
   sortProducts: function(e) {
     var selectedSortOption = this.$el.find("#sort option:selected").val();
-    App.helpers.setFilters({ sort : selectedSortOption});
-    this.doFetch();
+    App.helpers.setFilters({
+      sort: selectedSortOption
+    });
+    App.eventBus.trigger('GET_PRODUCTS', {
+      sort: selectedSortOption
+    });
   },
 
   chooseItemsPerPage: function() {
     var selectedLimit = this.$el.find("#items-per-page option:selected").val();
-    App.helpers.setFilters({ limit: selectedLimit});
-    this.doFetch();
+    App.helpers.setFilters({
+      limit: selectedLimit
+    });
+    App.eventBus.trigger('GET_PRODUCTS', {
+      limit: selectedLimit
+    })
   },
 
-  pageClicked: function (e) {
-    console.log("pageClicked ");
-    var nextpage = $(e.currentTarget).data('page');
-    console.log("nextpage ", nextpage);
-    App.helpers.setFilters({page: nextpage});
-    this.doFetch();
-  },
-
-  doFetch: function () {
-    var filters = App.helpers.getFilters();
-    this.collection.fetch({data: filters});
-    console.log("doFetch ", filters);
+  renderPaginationView: function() {
+    new App.views.PaginationView();
   }
-
 
 
 });;var App = App || {}
@@ -26180,6 +26251,87 @@ App.views.PageNotFound = Backbone.View.extend({
   	return this;
   }
 
+});;var App = App || {};
+
+App.views.PaginationView = Backbone.View.extend({
+  el: '#products-pagination',
+
+  events: {
+    'click .page': 'pageNumberClicked',
+  },
+
+  initialize: function(options) {
+    this.options = options || {};
+    console.log("paginationView options", this.options);
+    _.bindAll(this, 'render');
+    this.render();
+  },
+
+  render: function () {
+    var self = this;
+
+    var appliedFilters = App.helpers.getFilters();
+    var paginationHtml = '';
+    var numberOfPages = self.options.totalCount / appliedFilters.limit;
+
+    $.get('/src/templates/home.hbs', function(templateHtml) {
+
+      for(var i=1; i<= numberOfPages; i++) {
+        paginationHtml += (
+          '<li class="page-item">' +
+          '<a class="page page-link" href="#" data-page=' + i + '>' + i + '</a>' +
+          '</li>'
+        );
+      }
+      var template = Handlebars.compile(templateHtml);
+      self.$el.html(template());
+
+      var finalPagination = '<ul class="pagination">' + paginationHtml + '</ul>';
+      self.$el.html(finalPagination);
+
+    });
+    return this;
+  },
+
+  pageNumberClicked: function (e) {
+    var nextPage = $(e.currentTarget).data('page');
+    App.helpers.setFilters({
+      page: nextPage
+    });
+    App.eventBus.trigger('GET_PRODUCTS', {
+      page: nextPage
+    })
+  },
+});
+;var App = App || {};
+
+App.views.ProductsListView = Backbone.View.extend({
+  el: '#products-list',
+
+  events: {},
+
+  initialize: function(options) {
+    this.options = options || {};
+    console.log("this.options", this.options);
+    _.bindAll(this, 'render');
+    this.render();
+  },
+
+  render: function() {
+
+    var self = this;
+    var products = self.options.products;
+    console.log("products in render of products-list ", products);
+    $.get('/src/templates/productsList.hbs', function(templateHtml) {
+      var template = Handlebars.compile(templateHtml);
+      var finalHtml = template({
+        products: products,
+      });
+      self.$el.html(finalHtml);
+    });
+  	return this;
+  },
+
 });;var App = App || {}
 
 App.views.ProductView = Backbone.View.extend({
@@ -26189,7 +26341,7 @@ App.views.ProductView = Backbone.View.extend({
   },
 
   initialize: function(options) {
-    _.bindAll(this, 'render', 'onClickedNextPage');
+    _.bindAll(this, 'render');
     options || (options = {});
     // options = options || {};
     // falsy values - 0, null, undefined, '' NaN
@@ -26240,6 +26392,58 @@ App.views.SidebarView = Backbone.View.extend({
 
   	return this;
   }
+
+});;var App = App || {};
+
+App.views.TopActionsBarView = Backbone.View.extend({
+  el: '#top-actions-bar',
+
+  events: {
+    'change #sort': 'sortProducts',
+    'change #items-per-page': 'chooseItemsPerPage'
+  },
+
+  initialize: function(options) {
+    this.options = options || {};
+    _.bindAll(this, 'render');
+    console.log("options in topActionsBar ", options)
+    this.render();
+  },
+
+  render: function() {
+
+    var self = this;
+    console.log("options", self.options);
+
+    $.get('/src/templates/topActionsBar.hbs', function(templateHtml) {
+      var template = Handlebars.compile(templateHtml);
+      var finalHtml = template({
+        totalCount: self.options.totalCount,
+      });
+      self.$el.html(finalHtml);
+    });
+  	return this;
+  },
+
+  sortProducts: function(e) {
+    var selectedSortOption = this.$el.find("#sort option:selected").val();
+    App.helpers.setFilters({
+      sort: selectedSortOption
+    });
+    App.eventBus.trigger('GET_PRODUCTS', {
+      sort: selectedSortOption
+    });
+  },
+
+  chooseItemsPerPage: function() {
+    var selectedLimit = this.$el.find("#items-per-page option:selected").val();
+    App.helpers.setFilters({
+      limit: selectedLimit
+    });
+    App.eventBus.trigger('GET_PRODUCTS', {
+      limit: selectedLimit
+    })
+  },
 
 });;var App = App || {};
 

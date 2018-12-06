@@ -1,0 +1,49 @@
+{{#log totalCount}}{{/log}}
+<div class="container">
+  <div class="submenu-bar">
+    <div class="row">
+      <div class="submenu-bar-left-column col-sm-4">
+        	<span class="showing-n-items">{{totalCount}} items</span>
+          <button type="button" class="btn list-view">
+          	<i class="fa fa-th-list" aria-hidden="true"></i>
+          </button>
+          <button type="button" class="btn 2-grid-view">
+          	<i class="fa fa-th-large" aria-hidden="true"></i>
+        	</button>
+          <button type="button" class="btn 3-grid-view active">
+          	<i class="fa fa-th" aria-hidden="true"></i>
+          </button>
+      </div>
+      <div class="submenu-bar-right-column col-sm-8">
+      	<span class="add-to-wishlist-btn-wrapper">
+      		<button type="button" class="btn add-all-to-wishlist-btn">
+      			Add all to wishlist
+      		</button>
+      	</span>
+        <div class="styled-select s1">
+          <select id="sort">
+            <option value="">Sort</option>
+            <option value="pricing.retail;asc">Price Low to High</option>
+            <option value="pricing.retail;desc">Price High to Low</option>
+            <option value="company.optName;asc">Brands A to Z</option>
+            <option value="company.optName;desc">Brands Z to A</option>
+            <option value="attributes.brand_Collection;asc">Collection A to Z</option>
+            <option value="attributes.brand_Collection;desc">Collection Z to A</option>
+            <option value="opt.styleNumber;asc">Style # A to Z </option>
+            <option value="opt.styleNumber;desc">Style # Z to A </option>
+            <option value="categories.name;asc">Category A to Z</option>
+            <option value="categories.name;desc">Category Z to A</option>
+          </select>
+        </div>
+        <div class="styled-select s2">
+          <select id="items-per-page">
+            <option value="10">Items per page</option>
+            <option value="24">24</option>
+            <option value="48">48</option>
+            <option value="72">72</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

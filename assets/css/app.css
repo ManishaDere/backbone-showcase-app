@@ -106,7 +106,7 @@ footer {
 .slick-prev:before,
 .slick-next:before {
   font-family: 'slick';
-  font-size: 40px;
+  font-size: 30px;
   top: 0;
   color: #7c7c7c;
   -webkit-font-smoothing: antialiased;
