@@ -26313,8 +26313,40 @@ App.views.ProductsListView = Backbone.View.extend({
   initialize: function(options) {
     this.options = options || {};
     console.log("this.options", this.options);
-    _.bindAll(this, 'render');
+    _.bindAll(this, 'render', 'selectView');
+
+    App.eventBus.on('GRID_UPDATE', (function(eventData) {
+      this.selectView(eventData);
+    }).bind(this));
+
+    App.eventBus.trigger('GRID_UPDATE');
+
     this.render();
+  },
+
+  selectView: function(eventData) {
+    console.log("eventData ", eventData);
+
+
+    if ( this.$el.find('.product').hasClass('col-4') ) {
+
+      this.$el.find('.product').removeClass('col-4');
+
+    } else if(this.$el.find('.product').hasClass('col-6')) {
+
+      this.$el.find('.product').removeClass('col-6');
+
+    } else if(this.$el.find('.product').hasClass('col-12')) {
+
+      this.$el.find('.product').removeClass('col-12');
+
+    }
+
+    if(eventData) {
+      var viewSelected = eventData.viewSelected;
+      this.$el.find('.product').addClass(viewSelected);
+    }
+
   },
 
   render: function() {
@@ -26400,7 +26432,10 @@ App.views.TopActionsBarView = Backbone.View.extend({
 
   events: {
     'change #sort': 'sortProducts',
-    'change #items-per-page': 'chooseItemsPerPage'
+    'change #items-per-page': 'chooseItemsPerPage',
+    'click #list-view': 'chooseListView',
+    'click #two-grid-view': 'chooseTwoGridView',
+    'click #three-grid-view': 'chooseThreeGridView'
   },
 
   initialize: function(options) {
@@ -26444,6 +26479,24 @@ App.views.TopActionsBarView = Backbone.View.extend({
       limit: selectedLimit
     })
   },
+
+  chooseListView: function() {
+    App.eventBus.trigger('GRID_UPDATE', {
+      viewSelected: 'col-12'
+    });
+  },
+
+  chooseTwoGridView: function() {
+    App.eventBus.trigger('GRID_UPDATE', {
+      viewSelected: 'col-6'
+    });
+  },
+
+  chooseThreeGridView: function() {
+    App.eventBus.trigger('GRID_UPDATE', {
+      viewSelected: 'col-4'
+    });
+  }
 
 });;var App = App || {};
 

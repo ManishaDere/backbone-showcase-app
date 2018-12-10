@@ -5,7 +5,10 @@ App.views.TopActionsBarView = Backbone.View.extend({
 
   events: {
     'change #sort': 'sortProducts',
-    'change #items-per-page': 'chooseItemsPerPage'
+    'change #items-per-page': 'chooseItemsPerPage',
+    'click #list-view': 'chooseListView',
+    'click #two-grid-view': 'chooseTwoGridView',
+    'click #three-grid-view': 'chooseThreeGridView'
   },
 
   initialize: function(options) {
@@ -49,5 +52,23 @@ App.views.TopActionsBarView = Backbone.View.extend({
       limit: selectedLimit
     })
   },
+
+  chooseListView: function() {
+    App.eventBus.trigger('GRID_UPDATE', {
+      viewSelected: 'col-12'
+    });
+  },
+
+  chooseTwoGridView: function() {
+    App.eventBus.trigger('GRID_UPDATE', {
+      viewSelected: 'col-6'
+    });
+  },
+
+  chooseThreeGridView: function() {
+    App.eventBus.trigger('GRID_UPDATE', {
+      viewSelected: 'col-4'
+    });
+  }
 
 });

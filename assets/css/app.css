@@ -200,4 +200,18 @@ footer {
 .styled-select select{
   border: none;
 }
+.list-view {
+  display: flex;
+}
+.list-view a {
+  display: flex;
+}
+.list-view img {
+  max-width: 100%;
+}
+.list-view a div {
+  flex-basis: 50%;
+}
+.two-grid-view {
 
+}
