@@ -200,18 +200,78 @@ footer {
 .styled-select select{
   border: none;
 }
-.list-view {
-  display: flex;
+.input-min-price input,
+.input-max-price input {
+  max-width: 70px;
+  height: 30px;
 }
-.list-view a {
-  display: flex;
+#go-btn {
+  color: #000;
+  height: 30px;
+  border: 2px solid #ccc;
+  background: transparent;
+  border-radius: 0;
+  line-height: 0.5;
 }
-.list-view img {
-  max-width: 100%;
+a,
+a:hover {
+    color: #555;
 }
-.list-view a div {
-  flex-basis: 50%;
+.accordion-body ul{
+  list-style-type: none;
 }
-.two-grid-view {
+.accordion-body ul>li {
+  color: #555;
+  text-decoration: none;
+  padding-top: 10px;
+}
+.accordion-heading{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+/******dropdown filter css ********/
 
+.default-filter-style,
+.default-filter-style:hover,
+.default-filter-style:focus,
+.default-filter-style:active{
+  background-color: #fff;
+  color: #031e2f;
+  padding: 10px 10px 10px 2px;
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid #031e2f;
+  outline: 0 !important;
+  min-width: 180px;
 }
+#filter-by-price-dropdown{
+  background: transparent;
+  box-shadow: none;
+}
+#filter-by-price-dropdown > i{
+  padding-right: 15px;
+}
+.clickDropdown-filter-style,
+.clickDropdown-filter-style:focus,
+.clickDropdown-filter-style:hover,
+.clickDropdown-filter-style:active {
+  color: #fff !important;
+  background-color: #031e2f !important;
+  border-color: #031e2f !important;
+  padding: 10px 10px 10px 2px;
+  border-radius: 0;
+  outline: 0 !important;
+  min-width: 180px;
+}
+.dropdown-menu-changed {
+  color: #031e2f;
+  min-width: 180px;
+  font-size: 14px;
+  border: 1px solid #031e2f;
+  border-radius: 0px;
+  margin: 0px;
+}
+
+
+
+

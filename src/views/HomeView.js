@@ -5,6 +5,7 @@ App.views.HomeView = Backbone.View.extend({
 
   initialize: function() {
     _.bindAll(this, 'render');
+
     this.render();
   },
 
@@ -18,7 +19,7 @@ App.views.HomeView = Backbone.View.extend({
       }) );
 
 
-
+      self.renderFilterByDropdownView();
       self.renderSidebarView();
       self.renderMainView();
       self.renderCalloutsCarouselView();
@@ -40,6 +41,10 @@ App.views.HomeView = Backbone.View.extend({
   renderCalloutsCarouselView: function() {
     new App.views.CalloutsCarouselView();
   },
+
+  renderFilterByDropdownView: function(){
+    new App.views.FilterByDropdownView();
+  }
 
 
 });

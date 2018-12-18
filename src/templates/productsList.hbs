@@ -2,9 +2,9 @@
 {{log products}}
 <div class="row">
   {{#each products}}
-  <div class="product">
+  <div class="product col-md-4">
     <a class="product-link" href="#/product/{{id}}">
-      <div><img src="{{images.[0]}}" alt="Product Hero Image" class="img-fluid product-img"></div>
+      <div><img src="{{images.[0]}}" alt="Product Hero Image" class="img-responsive product-img"></div>
       <div class="product-description">
         <p class="product-name">{{brand.name}}</p>
         <p class="product-price"><strong>${{pricing.retail}}</strong></p>

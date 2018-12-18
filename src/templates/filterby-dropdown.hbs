@@ -1,0 +1,13 @@
+{{#log "options" options.items}}{{/log}}
+
+<div class="dropdown">
+  <button class="btn btn-default dropdown-toggle default-filter-style" type="button" id="filter-by-price-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    <i class="fas fa-angle-down"></i>
+    PRICE RANGE
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="filter-by-price-dropdown">
+    {{#each options.items}}
+      <li class="price-range-selected"><a href="#/">{{this.name}}</a></li>
+    {{/each}}
+  </ul>
+</div>

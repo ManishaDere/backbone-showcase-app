@@ -55,19 +55,19 @@ App.views.TopActionsBarView = Backbone.View.extend({
 
   chooseListView: function() {
     App.eventBus.trigger('GRID_UPDATE', {
-      viewSelected: 'col-12'
+      viewSelected: 'col-md-12'
     });
   },
 
   chooseTwoGridView: function() {
     App.eventBus.trigger('GRID_UPDATE', {
-      viewSelected: 'col-6'
+      viewSelected: 'col-md-6'
     });
   },
 
   chooseThreeGridView: function() {
     App.eventBus.trigger('GRID_UPDATE', {
-      viewSelected: 'col-4'
+      viewSelected: 'col-md-4'
     });
   }
 

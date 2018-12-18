@@ -22,17 +22,17 @@ App.views.ProductsListView = Backbone.View.extend({
   selectView: function(eventData) {
     console.log("eventData ", eventData);
 
-    if ( this.$el.find('.product').hasClass('col-4') ) {
+    if ( this.$el.find('.product').hasClass('col-md-4') ) {
 
-      this.$el.find('.product').removeClass('col-4');
+      this.$el.find('.product').removeClass('col-md-4');
 
-    } else if(this.$el.find('.product').hasClass('col-6')) {
+    } else if(this.$el.find('.product').hasClass('col-md-6')) {
 
-      this.$el.find('.product').removeClass('col-6');
+      this.$el.find('.product').removeClass('col-md-6');
 
-    } else if(this.$el.find('.product').hasClass('col-12')) {
+    } else if(this.$el.find('.product').hasClass('col-md-12')) {
 
-      this.$el.find('.product').removeClass('col-12');
+      this.$el.find('.product').removeClass('col-md-12');
 
     }
 
