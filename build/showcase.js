@@ -24347,6 +24347,17 @@ App.models.Designer = Backbone.Model.extend({
 
 ;var App = App || {}
 
+App.models.Item = Backbone.Model.extend({
+  url: function() {
+    console.log("in model", '../../assets/imagesData.json');
+    return '../../assets/imagesData.json';
+  },
+  defaults: {
+    id: null,
+  }
+});
+;var App = App || {}
+
 App.models.Product = Backbone.Model.extend({
   url: function() {
     return 'https://opt-showcase-api.optcentral.com/products/' + this.get('_id');
@@ -24376,6 +24387,23 @@ App.collections.Designers = Backbone.Collection.extend({
   url: 'https://opt-showcase-api-stage.optcentral.com/brands?brand_ids=3%2C2%2C46%2C463%2C581%2C50%2C1119%2C145%2C1801%2C2086&retailerId=143&showcase=OOO&status=Active',
   model: App.models.Designer
 });;var App = App || {}
+
+var base_url = '../../assets/imagesData.json';
+App.collections.Products = Backbone.Collection.extend({
+  url: function () {
+    return base_url;
+  },
+  model: App.models.Item,
+  parse: function(response) {
+    console.log("in collection", response);
+    return response;
+  }
+
+});
+
+
+
+;var App = App || {}
 
 var base_url = 'https://opt-showcase-api.optcentral.com/products';
 App.collections.Products = Backbone.Collection.extend({
@@ -24473,7 +24501,7 @@ App.views.FilterByDropdownView = Backbone.View.extend({
 
   events: {
     'click #filter-by-price-dropdown': 'filterByPriceDropdown',
-    'click #price-range-selected': 'priceRangeSelected'
+    'click .price-range-selected': 'priceRangeSelected'
   },
 
   initialize: function() {
@@ -24907,6 +24935,48 @@ App.views.ProductView = Backbone.View.extend({
 
 });;var App = App || {}
 
+App.views.ProgressView = Backbone.View.extend({
+  el: '#root',
+
+  events: {
+  },
+
+  initialize: function(options) {
+    console.log("in initialize");
+    console.log("options", options)
+    _.bindAll(this, 'render');
+    this.model = new App.models.Item();
+    this.model.set('id', options.itemId);
+    this.model.fetch();
+    this.listenTo(this.model, 'sync', this.render);
+
+    this.render();
+  },
+
+
+
+  render: function() {
+    var self = this;
+
+    $.get('/src/templates/progress.hbs', function(templateHtml) {
+      var template = Handlebars.compile(templateHtml);
+      var compiledHtml = template({
+        selectedImage: self.model.toJSON()
+      })
+      self.$el.html(compiledHtml);
+    });
+    var currentLocation = window.location;
+    console.log("currentlocation", currentLocation.href);
+    var actualLink = currentLocation.href;
+    if(actualLink.includes("1")) {
+      $('.entry-block > div i').removeClass("eye-icon_visibility");
+    }
+    return this;
+  },
+
+});
+;var App = App || {}
+
 App.views.SidebarView = Backbone.View.extend({
   el: '#sidebar',
 
@@ -25093,6 +25163,7 @@ App.Router = Backbone.Router.extend({
 
 	routes: {
 		'': 'homeView', // #/
+    'ajaffetest/:itemId': 'progressView',
     'product/:productId': 'productView',  // #/product/1223
     'brands/': 'designerView',
     '*actions': 'pageNotFound',  // #/xyz
@@ -25117,6 +25188,13 @@ App.Router = Backbone.Router.extend({
 
   designerView: function() {
     new App.views.DesignerView();
+  },
+
+  progressView: function(itemId) {
+	  console.log("in progress routes", itemId)
+	  new App.views.ProgressView({
+      itemId: itemId
+    });
   }
 
 });
